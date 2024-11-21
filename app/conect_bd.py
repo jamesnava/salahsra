@@ -3,7 +3,7 @@ from app.codificacion import descifrar,cifrar
 
 class Conexion_Galen(object):
 	def __init__(self):		
-		self.llave='qBBws2UNvFJNFZ5oRh5yx04AIhSzhCgjsfS3Q44QL_M='
+		
 	def ejecutar_conn(self):
 		servidor='192.168.1.4'
 		bd='SIGH'
