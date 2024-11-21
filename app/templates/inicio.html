@@ -1,0 +1,45 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='/css/inicio.css')}}">
+</head>
+<body>
+    <body>
+    	<form action="" method="post" novalidate>
+    	{{form.hidden_tag()}}
+        <div class="login">
+            <div class="login-screen">
+                <div class="app-title">
+                    <h1>Sala</h1>
+                </div>
+    
+                <div class="login-form">
+                    <div class="control-group">
+                    	
+                    	{{form.usuario(class='login-field',placeholder='Usuario')}}
+                    	
+                    </div>
+    
+                    <div class="control-group">
+                    	
+                    	{{form.clave(class="login-field",placeholder='Contraseña')}}
+                    	
+                    </div>
+    				 <div class="control-group">
+                    	
+                    	{{form.recordar()}}{{form.recordar.label()}}
+                    	
+                    </div>
+
+                    {{form.btn_iniciar()}}
+                    
+                    
+                </div>
+            </div>
+        </div>
+        </form>
+    </body>
+
+</html>     
