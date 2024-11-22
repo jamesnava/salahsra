@@ -87,7 +87,7 @@ function LimpiarCampo(idcampo){
 	$('#'+idcampo).val('')
 	}
 
-function abrirModalAciones(idmodal,formulario,id) { 	 
+function abrirModalAciones(idmodal,formulario,id) {     	 
     $('#'+idmodal).modal('show');
     idSalaEditar=id;
     }

@@ -209,7 +209,7 @@ class querySala:
 		cursor=obj_conectar.get_cursor()
 		try:
 			
-			sql=f"""select top 50 S.HC,S.Fech_Ingre from Sala as S LEFT JOIN URPA AS U ON S.Id_Sala=U.Id_Sala ORDER BY S.Fech_Ingre DESC"""					
+			sql=f"""select top 50 S.Id_Sala,S.HC,S.Fech_Ingre from Sala as S LEFT JOIN URPA AS U ON S.Id_Sala=U.Id_Sala ORDER BY S.Fech_Ingre DESC"""					
 			cursor.execute(sql)
 			rows=cursor.fetchall()
 

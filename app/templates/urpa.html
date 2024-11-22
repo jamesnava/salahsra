@@ -2,11 +2,11 @@
 {%block content%}
 <div class="container-fluid">
 <div class="mt-4" id="urpaNo">
-	<div><strong>Buscar pacientes para llenar en Urpa</strong></div>
-	<label><strong>Historia Clinica:</strong> </label>
-	<input type="text" >
-	<table class="table table-dark mt-4">
-		<thead>
+	<div id="titulo"><strong>Buscar pacientes para llenar en Urpa</strong></div>
+	<label class="mt-2"><strong>Historia Clinica:</strong> </label>
+	<input type="text" class="mt-2">
+	<table class="table table-primary mt-4">
+		<thead class="table-dark">
 			<tr>
 				<td>Nombres y Apellidos</td>
 				<td>Historia Clinica</td>
@@ -17,21 +17,21 @@
 			<tbody>
 				{%for val in datos%}
 				<tr>
-					<td>{{val[0]}}</td>
 					<td>{{val[1]}}</td>
 					<td>{{val[2]}}</td>
-					<td></td>
+					<td>{{val[3]}}</td>
+					<td><a href="#" onclick="abrirModalAciones('modalInsertUrpa','eformulario',{{val[0]}})">Editar</a></td>
 				</tr>
 				{%endfor%}
 			</tbody>
 		</table>
 </div>
 
-<div class="mt-2" id="urpaSi" style="border: solid 1px;">
-	<div><strong>Lista de pacientes en Urpa</strong></div>
-	<div></div>
-	<label ><strong>Historia Clinica:</strong> </label>
-	<input type="text" >
+<div class="mt-2" id="urpaSi" >
+	<div id="titulo"><strong>Lista de pacientes en Urpa</strong></div>
+	
+	<label class="mt-2"><strong>Historia Clinica:</strong> </label>
+	<input type="text" class="mt-2">
 
 	<table class="table table-dark mt-4">
 		<thead>
@@ -51,6 +51,41 @@
 				</tr>
 			</tbody>
 		</table>
+</div>
+
+<div class="modal fade" id="modalInsertUrpa" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <form id="verFormulario">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Insertar Urpa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">              
+                <div class="row">
+                	<div class="col">
+                	<label>Tiempo de Espera </label>
+                	</div>
+                	<div class="col">
+                	<input type="text" name="">
+                	</div>
+                </div>
+                <div class="row mt-2">
+                	<div class="col">
+                	<label>Fecha Ingreso </label>
+                	</div>
+                	<div class="col">
+                	<input type="date" name="">
+                	</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+               
+            </div>
+        </div>
+    </div>
+    </form>
 </div>
 </div>
 {%endblock%}

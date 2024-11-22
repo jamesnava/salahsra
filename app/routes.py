@@ -136,7 +136,7 @@ def urpa():
 	lista=[]
 	for val in rows:		
 		rowsDatos=obj_galen.consultarTabla('Pacientes','NroHistoriaClinica',val.HC)
-		lista.append([rowsDatos[0].PrimerNombre+" "+rowsDatos[0].ApellidoPaterno+" "+rowsDatos[0].ApellidoMaterno,val.HC,val.Fech_Ingre])
+		lista.append([val.Id_Sala,rowsDatos[0].PrimerNombre+" "+rowsDatos[0].ApellidoPaterno+" "+rowsDatos[0].ApellidoMaterno,val.HC,val.Fech_Ingre])
 	return render_template('urpa.html',datos=lista)
 
 @app.route('/fillselect',methods=['POST'])
