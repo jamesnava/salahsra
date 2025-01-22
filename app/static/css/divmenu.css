@@ -1,0 +1,73 @@
+   .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            /*justify-content: center;*/
+            margin-top: 50px;
+            border: solid 1px #007bff;
+        }
+
+        
+        .custom-div {
+            padding: 15px 30px;
+            width: 150px;
+            font-size: 18px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            text-align: center;
+            color: #fff;
+            background-color: #28a745;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        
+        .custom-div:hover {
+            background-color: #218838;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Efecto al hacer clic */
+        .custom-div:active {
+            background-color: #1e7e34;
+            transform: translateY(2px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Diferentes estilos para variar */
+        .custom-div.blue {
+            background-color: #007bff;
+        }
+
+        .custom-div.blue:hover {
+            background-color: #0056b3;
+        }
+
+        .custom-div.red {
+            background-color: #dc3545;
+        }
+
+        .custom-div.red:hover {
+            background-color: #c82333;
+        }
+
+        .custom-div.yellow {
+            background-color: #ffc107;
+            color: #000;
+        }
+
+        .custom-div.yellow:hover {
+            background-color: #e0a800;
+        }
+
+
+#menureportesala{
+    display: flex;
+    margin-top: 10px;
+    margin-left: 20px;
+    justify-content: center;
+}
+

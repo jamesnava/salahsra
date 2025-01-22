@@ -2,8 +2,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login HSRA</title>
     <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='/css/inicio.css')}}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/login.ico') }}">
 </head>
 <body>
     <body>
@@ -12,8 +13,9 @@
         <div class="login">
             <div class="login-screen">
                 <div class="app-title">
-                    <h1>Sala</h1>
+                    <h1>Hospital Sub Regional de Andahuaylas</h1>
                 </div>
+
     
                 <div class="login-form">
                     <div class="control-group">
@@ -33,10 +35,11 @@
                     	
                     </div>
 
-                    {{form.btn_iniciar()}}
-                    
+                    {{form.btn_iniciar(id="btn-in")}}
+
                     
                 </div>
+                
             </div>
         </div>
         </form>

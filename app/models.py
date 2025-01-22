@@ -1,4 +1,7 @@
-from app.conect_bd import Conexion_Galen,Conexion_Triaje
+from app.conect_bd import Conexion_Galen,Conexion_Triaje,Conexion_TriajeHIS
+from werkzeug.security import generate_password_hash,check_password_hash
+from app.usermodel import User
+#from app import login
 import traceback
 
 class queryGalen:
@@ -38,9 +41,61 @@ class queryGalen:
 			cursor.close()
 			obj_conectar.close_conection()
 			return rows
+	def consultarDatosPaciente(self,HC):
+		obj_conectar=Conexion_Galen()
+		obj_conectar.ejecutar_conn()
+		cursor=obj_conectar.get_cursor()
+		rows=[]
+		try:
+			
+			sql=f"""SELECT P.NroDocumento,P.PrimerNombre,P.ApellidoPaterno,P.ApellidoMaterno,DIS.Nombre AS DISTRITO,PRO.Nombre AS PROVINCIA,DEPA.Nombre AS DEPARTAMENTO 
+			FROM Pacientes AS P LEFT JOIN Distritos AS DIS ON P.IdDistritoProcedencia=DIS.IdDistrito
+			LEFT JOIN Provincias AS PRO ON DIS.IdProvincia=PRO.IdProvincia LEFT JOIN Departamentos AS DEPA ON 
+			PRO.IdDepartamento=DEPA.IdDepartamento WHERE P.NroHistoriaClinica='{HC}'
+			"""			
+			cursor.execute(sql)
+			rows=cursor.fetchall()
+			
+
+		except Exception as e:
+			raise e
+		finally:
+			cursor.close()
+			obj_conectar.close_conection()
+			return rows
+
+
+
 class querySala:
 	def __init__(self):
-		pass
+		self.password_hash=None
+	def set_password(self,password):
+		self.password_hash=generate_password_hash(password)
+	def check_password(self,password0,password1):
+		return check_password_hash(password0,password1)
+
+	
+	def Cargarusuario(self,campo,user_id):
+
+		obj_conectar=Conexion_Triaje()
+		obj_conectar.ejecutar_conn()
+		cursor=obj_conectar.get_cursor()
+		rows=None
+		try:
+			sql=f"""SELECT iduser, usua, clave FROM Usuario WHERE {campo} = ?"""
+			
+			cursor.execute(sql,(user_id,))
+			rows=cursor.fetchone()
+			
+		except Exception as e:
+			raise e
+		finally:
+			if rows:
+
+				return User(rows[0],rows[1],rows[2])
+			else:
+				return None
+
 	def consultarTabla(self,tabla):
 		obj_conectar=Conexion_Triaje()
 		obj_conectar.ejecutar_conn()
@@ -58,13 +113,32 @@ class querySala:
 			obj_conectar.close_conection()
 			return rows
 
-	def consultarTablaCantidad(self,tabla,cantidad):
+	def consultarTablaDate(self,tabla,campo,fechai,fechas):
 		obj_conectar=Conexion_Triaje()
 		obj_conectar.ejecutar_conn()
 		cursor=obj_conectar.get_cursor()
 		try:
 			
-			sql=f"""SELECT TOP {cantidad} * FROM {tabla} ORDER BY Fech_Ingre DESC"""			
+			sql=f"""SELECT * FROM {tabla} WHERE {campo} BETWEEN ? AND ?"""			
+			cursor.execute(sql,(fechai,fechas))
+			rows=cursor.fetchall()
+
+		except Exception as e:
+			print(e)
+		finally:
+			cursor.close()
+			obj_conectar.close_conection()
+			return rows
+
+
+	def consultarTablaCantidad(self,tabla,cantidad,fecha):
+		obj_conectar=Conexion_Triaje()
+		obj_conectar.ejecutar_conn()
+		cursor=obj_conectar.get_cursor()
+		try:
+			
+			sql=f"""SELECT TOP {cantidad} * FROM {tabla} ORDER BY {fecha} DESC"""	
+				
 			cursor.execute(sql)
 			rows=cursor.fetchall()
 
@@ -209,7 +283,43 @@ class querySala:
 		cursor=obj_conectar.get_cursor()
 		try:
 			
-			sql=f"""select top 50 S.Id_Sala,S.HC,S.Fech_Ingre from Sala as S LEFT JOIN URPA AS U ON S.Id_Sala=U.Id_Sala ORDER BY S.Fech_Ingre DESC"""					
+			sql=f"""select top 50 S.Id_Sala,S.HC,S.Fech_Ingre,U.Id_URPA from Sala as S 
+			LEFT JOIN URPA AS U ON S.Id_Sala=U.Id_Sala WhEre U.Id_URPA is null order by Id_Sala desc"""					
+			cursor.execute(sql)
+			rows=cursor.fetchall()
+
+		except Exception as e:
+			raise e
+		finally:
+			cursor.close()
+			obj_conectar.close_conection()
+			return rows
+
+	def consultarUrpa(self):
+		obj_conectar=Conexion_Triaje()
+		obj_conectar.ejecutar_conn()
+		cursor=obj_conectar.get_cursor()
+		try:
+			
+			sql=f"""select top 50 S.Id_Sala,S.HC,S.Fech_Ingre,U.Id_URPA from Sala as S 
+			right JOIN URPA AS U ON S.Id_Sala=U.Id_Sala ORder bY Id_URPA Desc"""					
+			cursor.execute(sql)
+			rows=cursor.fetchall()
+
+		except Exception as e:
+			raise e
+		finally:
+			cursor.close()
+			obj_conectar.close_conection()
+			return rows
+				
+	def consultarIdTable(self,tabla,campo):
+		obj_conectar=Conexion_Triaje()
+		obj_conectar.ejecutar_conn()
+		cursor=obj_conectar.get_cursor()
+		try:
+			
+			sql=f"""select top 1 {campo} AS idtabla from {tabla} OrDer by {campo} dESC"""					
 			cursor.execute(sql)
 			rows=cursor.fetchall()
 
@@ -221,8 +331,31 @@ class querySala:
 			return rows
 
 
+class queryHIS:
+	def __init__(self):
+		pass
+	def consultarAtenciones(self):
+		rows=[]
+		columnas=[]
+		obj_conectar=Conexion_TriajeHIS()
+		obj_conectar.ejecutar_conn()
+		cursor=obj_conectar.get_cursor()
+		try:
+			
+			sql=f"""select Id_Cita,Fecha_Atencion from TRAMA where Fecha_Atencion between 
+			'2024-01-01' and '2024-01-31' group by Id_Cita,Fecha_Atencion"""					
+			cursor.execute(sql)
+			rows=cursor.fetchall()
+			columnas=[columns[0] for columns in cursor.description] 
+
+		except Exception as e:
+			print(e)
+		finally:
+			cursor.close()
+			obj_conectar.close_conection()
+			return columnas,rows
+
 			
 		
-
 
 

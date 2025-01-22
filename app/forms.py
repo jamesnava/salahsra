@@ -29,7 +29,7 @@ class SalaForm(FlaskForm):
 	HoraIngreso=TimeField('Hora Ingreso',validators=[DataRequired()])
 	FechaSalida=DateField('Fecha Salida',validators=[DataRequired()])
 	HoraSalida=TimeField('Hora Salida',validators=[DataRequired()])
-	TiempoUso=DecimalField('Uso')
+	TiempoUso=StringField('Uso')
 	Derivado=StringField('Derivar a',validators=[DataRequired()])
 	Financiamiento=SelectField('Financiamiento')
 	Observacion=TextAreaField('Observacion')

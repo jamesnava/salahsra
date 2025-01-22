@@ -1,15 +1,68 @@
 {%extends "base.html"%}
+{%block title%}
+Modulo Sala
+{%endblock%}
 
 {%block content%}
 <div class="container-fluid">
-<!--<a href="#" onclick="abrirModal('insertar','formInsertar')">Insertar</a>-->
-<button class="btn btn-primary m-4" onclick="abrirModal('insertar','formInsertar')">Insertar</button>
-<label>Buscar</label>
-<input type="text" id="idsearch">
+
+<div class="btn-group m-4" role="group" aria-label="Basic radio toggle button group">  
+  <input type="radio" class="btn-check" name="btnradio" id="btnradio1">
+  <label class="btn btn-outline-primary" for="btnradio1">Programado</label>
+  <input type="radio" class="btn-check" name="btnradio" id="btnradio2" onclick="abrirModal('insertar','formInsertar')">
+  <label class="btn btn-outline-primary" for="btnradio2">Ejecutado</label>
+
+</div>
 
 <div id="divcontenedor">
-<table class="table" border="1" id="tabledata">
-    <thead>
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#programada" type="button" role="tab" aria-controls="home" aria-selected="false">Programadas</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#ejecutada" type="button" role="tab" aria-controls="ejecutada" aria-selected="true">Ejecutadas</button>
+  </li>  
+</ul>
+
+<div class="tab-content" id="myTabContent">  
+  <div class="tab-pane fade" id="programada" role="tabpanel" aria-labelledby="profile-tab">
+
+    <table class="table my-table table-bordered table-hover" id="tabledata">
+    <thead class="table-dark">
+    <tr>
+        
+        <th>Datos Generales</th>
+        <th>Historia Clinica</th>
+        <th>Fecha suspencion</th>
+        <th>Motivo</th>
+            
+              
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody class="table-primary">
+    {%for val in registrosprogramados%}
+    <tr>        
+        <td>{{val[1]}}</td>
+        <td>{{val[4]}}</td>
+        <td>{{val[3]}}</td>
+        <td>{{val[2]}}</td>
+              
+        
+        <td><a href="#" data-id="{{val[0]}}" class="btn-eliminar">Eliminar</a></td>
+    </tr>
+    {%endfor%}
+    </tbody>
+</table>
+
+
+  </div>
+  <div class="tab-pane fade" id="ejecutada" role="tabpanel" aria-labelledby="contact-tab">
+<label>Buscar</label>
+<input type="text" id="idsearch">
+<table class="table my-table table-bordered table-hover"  id="tabledata">
+    <thead class="table-dark">
     <tr>
         <!--<th>ID</th>-->
         <th>Datos Generales</th>
@@ -21,7 +74,7 @@
         <th colspan="3">Acciones</th>
     </tr>
     </thead>
-    <tbody>
+    <tbody class="table-primary">
     {%for val in registros%}
     <tr>
         <!--<td>{{val[0]}}</td>-->
@@ -39,78 +92,83 @@
     </tbody>
 </table>
 </div>
+</div>
+</div>
 
 
-<div class="container">
-<form id="formInsertar" action="" method="post">    
+<div class="container"> 
+<form id="formInsertar" action="" method="post">
 <div class="modal fade" id="insertar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Insertar a Sala</h1>
+      <div class="modal-header">      
+
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       
       	{{form.hidden_tag()}}
-      <div class="modal-body">
-      	<p>
-        <div class="row">
-        <div class="col-4">
-        {{form.HC.label()}}
-        {{form.HC(id='CampoHC',class="form-control",onkeydown="if (event.key==='Enter') Llenardatos(event)")}}
-        </div>
-        </div>
-        </p>
+        
+            <div class="modal-body">
+                <div class="tab-content" id="myTabContent">
+      	             <p>
+                        <div class="row">
+                        <div class="col-4">
+                        {{form.HC.label()}}
+                        {{form.HC(id='CampoHC',class="form-control",onkeydown="if (event.key==='Enter') Llenardatos(event,'CampoHC','NombresApellidos')")}}
+                        </div>
+                        </div>
+                     </p>
 
-        <p>
-        	<div class="row">
-        		<div class="col-3">
-        			{{form.datos.label()}}
-        		</div>
-        		<div class="col-3">
-        			{{form.Tipo_Intervecion.label()}}
-        		</div>
-        		<div class="col-3">
-        			{{form.UPPS.label()}}
-        		</div>
-        		<div class="col-3">
-        			{{form.COMPLEJIDAD.label()}}
-        		</div>
-        	</div>
-        	<div class="row">
-        		<div class="col-3 ">
-        			{{form.datos(id='NombresApellidos',class="form-control")}}
-        		</div>
-        		<div class="col-3 ">
-        			{{form.Tipo_Intervecion(id="tintervencion",class="form-control",onchange="LlenarSelect('tintervencion','UPSS','iupss','SALA','Descripcion')")}}
-        		</div>
-        		<div class="col-3 ">
-        			{{form.UPPS(id="iupss",class="form-control")}}
-        		</div>
-        		<div class="col-3 ">
-        			{{form.COMPLEJIDAD(style="width: 150px; font-size: 14px;",class="form-control")}}
-        		</div>
-        	</div>        	
-        	<div class="row mt-4">
-        		<div class="col-3">
-        			{{form.DX1.label()}}
-        		</div>
-        		<div class="col-3">
-        			{{form.DX2.label()}}
-        		</div>
-        		<div class="col-3">
-        			{{form.IntervencionQ.label()}}
-        		</div>
-        		<div class="col-3">
-        			{{form.DX1POST.label()}}
-        		</div>
+                    <p>
+        	           <div class="row">
+        		          <div class="col-3">
+        			         {{form.datos.label()}}
+        		          </div>
+        		          <div class="col-3">
+        			         {{form.Tipo_Intervecion.label()}}
+        		          </div>
+        		          <div class="col-3">
+        			         {{form.UPPS.label()}}
+        		          </div>
+        		          <div class="col-3">
+        			         {{form.COMPLEJIDAD.label()}}
+        		          </div>
+        	           </div>
+        	           <div class="row">
+        		          <div class="col-3 ">
+        			         {{form.datos(id='NombresApellidos',class="form-control")}}
+        		          </div>
+        		          <div class="col-3 ">
+        			         {{form.Tipo_Intervecion(id="tintervencion",class="form-control",onchange="LlenarSelect('tintervencion','UPSS','iupss','SALA','Descripcion')")}}
+        		          </div>
+        		          <div class="col-3 ">
+        			         {{form.UPPS(id="iupss",class="form-control")}}
+        		          </div>
+        		          <div class="col-3 ">
+        			         {{form.COMPLEJIDAD(style="width: 150px; font-size: 14px;",class="form-control")}}
+        		          </div>
+        	           </div>        	
+        	           <div class="row mt-4">
+        		          <div class="col-3">
+        			         {{form.DX1.label()}}
+        		          </div>
+        		          <div class="col-3">
+        			         {{form.DX2.label()}}
+        		          </div>
+        		          <div class="col-3">
+        			         {{form.IntervencionQ.label()}}
+        		          </div>
+        		          <div class="col-3">
+        			         {{form.DX1POST.label()}}
+        		          </div>
 
-        	</div>
-        	<div class="row">
-        		<div class="col-3 ">
-        			{{form.DX1(id='DX1',class="form-control",onclick="LimpiarCampo('DX1')",oninput="BuscarInstrumentista('DX1','Cie10','iddivdx1','SALA')")}}
-        			<div id="iddivdx1" style="max-height: 200px;width: 300px; overflow-y: auto;background-color: #434a54;color:#fff;"></div>
-        		</div>
+        	           </div>
+        	           <div class="row">
+        		          <div class="col-3 ">
+        			         {{form.DX1(id='DX1',class="form-control",onclick="LimpiarCampo('DX1')",oninput="BuscarInstrumentista('DX1','Cie10','iddivdx1','SALA')")}}
+        			     <div id="iddivdx1" style="max-height: 200px;width: 300px; overflow-y: auto;background-color: #434a54;color:#fff;"></div>
+        		      </div>
         		<div class="col-3 ">
         			{{form.DX2(id='DX2',class="form-control",onclick="LimpiarCampo('DX2')",oninput="BuscarInstrumentista('DX2','Cie10','iddivdx2','SALA')")}}
         			<div id="iddivdx2" style="max-height: 200px;width: 300px; overflow-y: auto;background-color: #434a54;color:#fff;"></div>
@@ -184,7 +242,7 @@
         			<div id="iddivinstrumentista2" style="max-height: 200px;width: 300px; overflow-y: auto;background-color: #434a54;color:#fff;"></div>
         		</div>
         		<div class="col-3 ">
-        			{{form.FechaIngreso(id="fechai")}}
+        			{{form.FechaIngreso(id="fechai",class="form-control")}}
         		</div>
         		<div class="col-3 ">
         			{{form.HoraIngreso(id="horai")}}
@@ -209,7 +267,7 @@
         	</div>
         	<div class="row">
         		<div class="col-3 ">
-        			{{form.FechaSalida(id="fechas")}}
+        			{{form.FechaSalida(id="fechas",class="form-control")}}
         		</div>
         		<div class="col-3 ">
         			{{form.HoraSalida(id='horasalida',onchange="calculardiferencia('fechai','horai','fechas','horasalida','iduso')")}}
@@ -217,7 +275,7 @@
         		<div class="col-3 ">
         			{{form.TiempoUso(id='iduso',class="form-control")}}
         		</div>
-        		<div class="col-3 ">
+        		<div class="col-3 ">  
         			{{form.Derivado(id='derivar',class="form-control",oninput="BuscarInstrumentista('derivar','SERVICIO_DERIVAR','iddivderivar','DERIVAR')")}}
         			<div id="iddivderivar" style="max-height: 200px;width: 300px; overflow-y: auto;background-color: #434a54;color:#fff;"></div>
         		</div>
@@ -233,9 +291,7 @@
         		<div class="col-3">
         			{{form.Responsable.label()}}
         		</div>
-        		<div class="col-3">
-        			{{form.Situacion.label()}}
-        		</div>
+        		
         		
 
         	</div>
@@ -250,20 +306,87 @@
         			{{form.Responsable(class="form-control",id="idresponsable", oninput="BuscarInstrumentista('idresponsable','Empleados','iddivresponsable','GALEN')")}}
                     <div id="iddivresponsable" style="max-height: 200px;width: 300px; overflow-y: auto;background-color: #434a54;color:#fff;"></div>
         		</div>
-        		<div class="col-3 ">
-        			{{form.Situacion(class="form-control")}}
-        		</div>        		
+        		       		
         	</div>
-        </p>
+            </p>
       </div>
-      <div class="modal-footer">
-        {{form.guardar()}}
-      </div>
+        <div class="modal-footer">
+         {{form.guardar()}}
+        </div>
       
+    </div>
+    
+
+        
+        
     </div>
   </div>
 </div>
 </form>
+<!-- programado -->
+
+<div class="modal fade" id="mprogramado" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <form id="formprogramado">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Cirugias programadas</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                
+                <form id="formEditar">
+                    
+                    <div class="form-group">
+                        <label>Historia Clinica</label>
+                        <input type="text" id="CampoHCSUS" class="form-control" onkeydown="if (event.key==='Enter') Llenardatos(event,'CampoHCSUS','NombresApellidosSUS')">
+                    </div>
+                    <div class="form-group">
+                        <label>Nombres y Apellidos</label>
+                        <input type="text" class="form-control" id="NombresApellidosSUS">
+                    </div>
+                    <div class="form-group">
+                         <label>Dx de Ingreso</label>
+                        <input type="text" class="form-control" id="DXSUS" onclick="LimpiarCampo('DXSUS')", oninput="BuscarInstrumentista('DXSUS','Cie10','iddivdxSUS','SALA')">
+                        <div id="iddivdxSUS" style="max-height: 200px;width: 300px; overflow-y: auto;background-color: #434a54;color:#fff;"></div>
+                    </div>
+                    <div class="form-group">
+                         <label>Motivo suspension</label>
+                         <select class="form-control" id="selectmotivo">
+                             
+                         </select>
+                    </div>
+                    <div class="form-group">
+                         <label>Describa Motivo Suspencion</label>
+                        <textarea class="form-control" id="descmotivo"></textarea>
+                    </div>
+                    <div class="form-group">
+                         <label>Solucion Propuesta</label>
+                        <input type="text" class="form-control" name="" id="propuestasolucion">
+                    </div>
+                    <div class="form-group">
+                         <label>Responsable</label>
+                        <input type="text" class="form-control" id="respoSUS" oninput="BuscarInstrumentista('respoSUS','Empleados','divrespoSUS','GALEN')">
+                        <div id="divrespoSUS" style="max-height: 200px;width: 300px; overflow-y: auto;background-color: #434a54;color:#ff;"></div>
+
+                    </div>
+                     <div class="form-group">
+                         <label>Fecha Suspencion</label>
+                         <input type="date" class="form-control" id="fechasuspencion">
+                    </div>
+                                       
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="btnCirugiasSuspendidas">Guardar cambios</button>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
+
+
 <!-- Modal Editar -->
 <div class="modal fade" id="modalEditar" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
     <form id="eformulario">
@@ -300,6 +423,7 @@
     </div>
     </form>
 </div>
+
 <!--
 Modal visualizar
 

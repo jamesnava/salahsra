@@ -1,20 +1,29 @@
 var idSalaEditar;
+//menue
 
-function Llenardatos(event){
+$(document).ready(function() {
+    $('.category-link').click(function(e) {
+        e.preventDefault();        
+        $(this).next('.sub-menu').slideToggle();
+    });
+});
+
+
+function Llenardatos(event,campo,valor){
+
 	if (event){
 		event.preventDefault();
 	}
-	var hc=$('#CampoHC').val()
-
+	var hc=$('#'+campo).val()	
 	$.ajax({
-		url:'/llenardatospaciente',
+		url:'/salabp/llenardatospaciente',
 		type:'POST',
 		data:{
 			hc:hc
 		},
 		success:function(response){
 			
-			$('#NombresApellidos').val(response.PrimerNombre+' '+response.ApellidoPaterno+' '+response.ApellidoMaterno);
+			$('#'+valor).val(response.PrimerNombre+' '+response.ApellidoPaterno+' '+response.ApellidoMaterno);
 		},
 		error:function(){
 			console.error('Error al enviar solicitud')
@@ -23,12 +32,11 @@ function Llenardatos(event){
 }
 
 
-function BuscarInstrumentista(campo,tabla,iddiv,bd){
-	
+function BuscarInstrumentista(campo,tabla,iddiv,bd){ 	
 	var val=$('#'+campo).val()
 	if (val.length>1){
 	$.ajax({
-		url:'/search',
+		url:'/salabp/search',
 		type:'POST',
 		data:{
 			val:val,
@@ -53,6 +61,7 @@ function BuscarInstrumentista(campo,tabla,iddiv,bd){
 		$('#'+iddiv).hide()
 	}
 }
+
  function SeleccionarInstrumentalista(valorSeleccionado,iddiv,campo) {
         $('#'+campo).val(valorSeleccionado); 
         $('#'+iddiv).hide();  
@@ -68,8 +77,15 @@ function calculardiferencia(fechai,horai,fechas,horas,uso){
 		fechafin=new Date(`${fechasalida}T${horasalida}:00`);
 		
 		const diferencia=fechafin-fechainicio;		
-		const diferenciahoras=diferencia/(1000*60*60)
-		$('#'+uso).val(diferenciahoras)
+		const diferenciasegundos=Math.floor(diferencia/1000);
+		//calcular horas, minutos y segundos
+		const horas=Math.floor(diferenciasegundos/3600);
+		const minutos=Math.floor((diferenciasegundos%3600)/60);
+		const segundos=diferenciasegundos%60;
+
+		const formatoTiempo = String(horas).padStart(2, '0') + ':' + String(minutos).padStart(2, '0') + ':' +String(segundos).padStart(2, '0');
+
+		$('#'+uso).val(formatoTiempo)
 	}
 	else{
 		alert('llene los campos de la fecha y hora, para generar el calculo')
@@ -77,17 +93,20 @@ function calculardiferencia(fechai,horai,fechas,horas,uso){
 
 }
 
-function abrirModal(idmodal,formulario) { 
+function abrirModal(idmodal,formulario) { 	
 	$('#'+formulario)[0].reset();    
     $('#'+idmodal).modal('show');
     }
+
+  
 
 function LimpiarCampo(idcampo){
 
 	$('#'+idcampo).val('')
 	}
 
-function abrirModalAciones(idmodal,formulario,id) {     	 
+function abrirModalAciones(idmodal,formulario,id) {  
+	$('#'+formulario)[0].reset();   	 
     $('#'+idmodal).modal('show');
     idSalaEditar=id;
     }
@@ -122,7 +141,7 @@ function versala(idmodal,formulario,cod){
 		let codigo=cod;
 		$('#'+idmodal).modal('show');
 		$.ajax({
-			url:'/versala',
+			url:'/salabp/versala',
 			type:'POST',
 			data:{
 				codigo:codigo
@@ -151,7 +170,7 @@ function versala(idmodal,formulario,cod){
 function eliminarSala(cod){
 	      let valor=cod;
 		$.ajax(
-		{url:'/deletesala',type:'POST',data:{
+		{url:'/salabp/deletesala',type:'POST',data:{
 			valor:valor,
 		},success:function(response){
 			if (response==1){
@@ -170,11 +189,12 @@ function eliminarSala(cod){
 
 
 $(document).ready(function(){
+
 	$('.btn-eliminar').click(function(e){
 		e.preventDefault();
 		let valor=$(this).data('id');
 		$.ajax(
-		{url:'/deletesala',type:'POST',data:{
+		{url:'/salabp/deletesala',type:'POST',data:{
 			valor:valor,
 		},success:function(response){
 			if (response==1){
@@ -199,7 +219,7 @@ $(document).ready(function(){
 		let complejidad=$('#Mcomplejidad').val();
 
 		$.ajax({
-			url:'/modificarsala',
+			url:'/salabp/modificarsala',
 			type:'POST',
 			data:{
 				tipointer:tipointervencion,
@@ -207,21 +227,27 @@ $(document).ready(function(){
 				complejidad:complejidad,
 				codigo:idSalaEditar
 			}, success:function(response){
-				alert(response);
+				if (response==1){
+					alert("Se modificó correctamente!!")
+					location.reload(true);
+				}
+				
 			},
 			error: function(){
+
 
 			}
 		});
 
 	});
+	
 
 	$('.verData').click(function(e){
 		e.preventDefault()
 		let codigo=$(this).data('id');
 		$('#modalVisualizar').modal('show');
 		$.ajax({
-			url:'/versala',
+			url:'/salabp/versala',
 			type:'POST',
 			data:{
 				codigo:codigo
@@ -252,7 +278,7 @@ $(document).ready(function(){
 		let valor=$('#idsearch').val()
 		
 		$.ajax({
-			url:'/search',
+			url:'/salabp/search',
 			type:'POST',
 			data:{
 				val:valor,
@@ -281,4 +307,138 @@ $(document).ready(function(){
 		});
 	});
 
+	
+
+
+  $('#modalInsertUrpa').on('shown.bs.modal', function () {
+    const selectElement = $('#selectAnestesia');
+    selectElement.empty();
+    $.ajax({
+    	url:'/salabp/llenarAnestesia',
+    	type:'POST',
+    	data:'ninguno',
+    	success: function(response){
+    		response.forEach(opcion => {
+       		 selectElement.append(`<option value="${opcion.value}">${opcion.text}</option>`);
+      		});
+    		
+    	}
+    });
 });
+
+
+$('#btnguardarurpa').on('click',function(){
+	let tiempoespera=$('#tiempoespera').val()
+	let Fechaingreso=$('#FechaIurpa').val()
+	let Horaingreso=$('#HoraIurpa').val()
+	let FehaSalida=$('#FechaSurpa').val()
+	let HoraSalida=$('#HoraSurpa').val()
+	let permanencia=$('#Permanencia').val()
+	let derivar=$('#idderrivarurpa').val()
+	let responsable=$('#iddivurpainstrumentista').val()
+	let tipoanestecia=$('#selectAnestesia').val()
+	params={'Id_Sala':idSalaEditar,'tiempoespera':tiempoespera,'Fechaingreso':Fechaingreso,'Horaingreso':Horaingreso,
+	'FehaSalida':FehaSalida,'HoraSalida':HoraSalida,'permanencia':permanencia,'derivar':derivar,'responsable':responsable,
+	'tipoanestecia':tipoanestecia}
+
+	$.ajax({
+		url:'/salabp/inserturpa',
+		type:'POST',
+		data:params,
+		success:function(response){
+			if (response==1){
+				alert("se insertó correctamente!!")
+				$('#modalInsertUrpa').hide(); 
+				location.reload(true);
+			}
+			else{
+				alert('debe llenar el campo '+response)
+			}
+		}
+	});
+
+});
+
+
+
+
+$('#btnradio1').on('click',function(){
+	$('#mprogramado').modal('show');
+
+	const selectElemento=$('#selectmotivo');
+	selectElemento.empty();
+	$.ajax({
+		url:'/salabp/programado',
+		type:'POST',
+		success:function(response){
+			response.forEach(opcion=>{
+				selectElemento.append(`<option value="${opcion.value}">${opcion.text}</option>`)
+			});
+
+	}});
+});
+
+
+
+//guardar cirugias programadas
+
+$('#btnCirugiasSuspendidas').on('click',function(){
+	var HC=$('#CampoHCSUS').val();
+	var Id_Cie=$('#DXSUS').val();
+	var Id_Motivo=$('#selectmotivo').val();
+	var descmotivo=$('#descmotivo').val();
+	var responsable=$('#respoSUS').val();
+	var solucion=$('#propuestasolucion').val();
+	var Fechasus=$('#fechasuspencion').val();
+	params={'Id_Cie':Id_Cie,'idmotivo':Id_Motivo,'descripcionmotivo':descmotivo,
+	'solucionp':solucion,'responsable':responsable,'fechasuspencion':Fechasus,'HC':HC}
+	$.ajax({url:'/salabp/insertsus',
+		type:'POST',
+		data:params,
+		success:function(response){
+			if (response==1){
+				alert('Se insertó correctamente!')
+				$('#mprogramado').hide();
+				location.reload(true);
+
+			}
+			else{
+				alert('debe llenar el campo '+response)
+			}
+
+	}});
+});
+
+var valoroculto;
+
+$('#rsala,#rurpa').click(function(event){
+	var elementoorigen=$(event.target);
+	var idelemento=elementoorigen.attr('id');	
+	$('#ReporteSala').modal('show');
+	valoroculto=idelemento;
+});
+
+$('#generarReporteSala').click(function(){
+		var fechai = $('#dateSafter').val();
+        var fechas = $('#dateSbefore').val();
+        
+        if (!fechai || !fechas) {
+            alert("Por favor, selecciona las fechas.");
+            return;
+        }
+
+        // Asignar valores al formulario
+        $('#inputFechaI').val(fechai);
+        $('#inputFechaS').val(fechas);
+        $('#categoria').val(valoroculto);
+        // Enviar el formulario para descargar el archivo
+        $('#formGenerarReporte').submit();
+
+        // Detectar finalización de la descarga cerrando el modal después de un tiempo
+        setTimeout(function() {
+        var modal = bootstrap.Modal.getInstance(document.getElementById('ReporteSala'));
+        modal.hide(); }, 1000);
+
+	});
+});
+

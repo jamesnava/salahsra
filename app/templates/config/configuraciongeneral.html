@@ -1,0 +1,14 @@
+{%extends "base.html"%}
+
+{%block content%}
+<div class="container">
+        <div class="custom-div" id="configuser"><img src="{{url_for('static',filename='/img/user/userg.png')}} "> Usuario</div>
+        <div class="custom-div blue" onclick="alert('¡Div azul clicado!')">Div Azul</div>
+        <div class="custom-div red" onclick="alert('¡Div rojo clicado!')">Div Rojo</div>
+        <div class="custom-div yellow" onclick="alert('¡Div amarillo clicado!')">Div Amarillo</div>
+ </div>
+
+ <div class="container pt-4" id="user-submenu">
+        
+ </div>
+{%endblock%}

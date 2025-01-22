@@ -6,11 +6,22 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+
 }
 
+#contentprincipal{
+  background: #f2f5f9; 
+  height: 100vh;
+}
+
+.cerrar{
+  float: right;
+  color: white;
+}
 body{
   font-family:'Roboto' , 'sans-serif';
   overflow:hidden;
+
 }
 
 .main-header{
@@ -29,6 +40,7 @@ nav{
   background:#323944;
   transform:translateX(-100%);
   transition:.4s ease;
+  z-index: 999;
 }
 
 .navigation li{
@@ -48,6 +60,7 @@ nav{
 
 .navigation a:hover{
   transform:translateX(10%);
+  background-color: tomato;
 }
 
 #btn-nav{
@@ -80,10 +93,13 @@ nav{
   max-height:80vh;
   margin: 10px;
   overflow-y: scroll;
+  border: 1px solid;
+  border-radius: 5px;
 }
 
 #urpaNo{
   max-height: 40vh;
+  height: 40vh;
   overflow-y: scroll;
   padding: 10px;  
   border: solid 1px;
@@ -92,6 +108,7 @@ nav{
 
 #urpaSi{
   max-height: 40vh;
+  height: 40vh;
   overflow-y: scroll;
   padding: 10px;  
   border: solid 1px;
@@ -103,14 +120,19 @@ nav{
   text-align: center;
   border-radius: 7px;
 }
+.form-control{
+  border-width: 2px !important;
+  border-color: #007bff !important; 
+  border-style: solid !important;
+}
 
 div::-webkit-scrollbar {
-    width: 8px; /* Ancho de la barra de desplazamiento */
+    width: 8px; 
 }
 
 div::-webkit-scrollbar-thumb {
-    background-color: #888; /* Color del scroll */
-    border-radius: 4px; /* Bordes redondeados */
+    background-color: #888; 
+    border-radius: 4px; 
 }
 
 div::-webkit-scrollbar-thumb:hover {
@@ -119,4 +141,19 @@ div::-webkit-scrollbar-thumb:hover {
 
 div::-webkit-scrollbar-track {
     background-color: #f1f1f1; /* Color del fondo del scroll */
+}
+
+
+
+.sub-menu {
+    display: none;
+}
+.category-link{
+  font-family: fantasy cursive;
+  font-size: 14px;
+}
+
+li a{
+  font-family: fantasy cursive;
+  font-size: 12px;
 }

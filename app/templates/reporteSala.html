@@ -1,0 +1,41 @@
+{%extends "base.html"%}
+
+{%block content%}
+<div class="" id="reportesala">
+  <div id="menureportesala">
+    <div id="rsala" class="custom-div m-4">Reporte Sala</div>
+    <div id="rurpa" class="custom-div m-4">Reporte Urpa</div>
+  </div>
+  
+
+  <div class="modal fade" id="ReporteSala" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <form id="eformulario">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Generar Reporte</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <label>Desde</label>
+                <input type="date" id="dateSafter" class="form-control">
+
+                <label>Hasta</label>
+                <input type="date" id="dateSbefore" class="form-control">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="generarReporteSala" >Generar</button>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
+</div>
+<form id="formGenerarReporte" action="/salabp/generarreportesala" method="GET" target="iframeDescarga">
+    <input type="hidden" id="inputFechaI" name="fechai">
+    <input type="hidden" id="inputFechaS" name="fechas">
+    <input type="hidden" id="categoria" name="categoria">
+</form>
+<iframe id="iframeDescarga" style="display:none;"></iframe>
+{%endblock%}
