@@ -11,15 +11,23 @@ $(document).ready(function(){
 		});
 	});
 
-	$('#Apersona').click(function(){
-
+	$('#user-submenu').on('click','#addpersona',function(){
 		$.ajax({
-			url:'/cfg/mostrarpersonal',
+			url:'/cfg/listarpersonal',
 			type:'GET',
-			success: function(response){
-				alert('hola');
-				$('#contenedoracceso').html(response);
-				
+			success:function(response){
+			 $('#contenedoracceso').html(response.html);
+			 let TableBody=$('#tabla-personal tbody');
+			 TableBody.empty();
+			 response.data.forEach(function(row){
+			 	let newRow=`<tr>
+			 	<td>${row.Dni}</td>
+			 	<td>${row.NOMBRES}</td>
+			 	<td>${row.APELLIDOS}</td>
+			 	<td><button class='btn btn-primary'>Editar</button></td>			 				 	
+			 	</tr>`;
+			 	TableBody.append(newRow);
+			 });
 			}
 		});
 	});
