@@ -104,7 +104,6 @@ def generarReporteUrpa(fechai,fechas):
 				ws[letra_columna[6]+str(nro_start)]=rows_pac[0].PROVINCIA
 				ws[letra_columna[7]+str(nro_start)]=rows_pac[0].DISTRITO
 
-
 			ws[letra_columna[8]+str(nro_start)]=val.FECHAI
 			ws[letra_columna[9]+str(nro_start)]=val.HORAI
 			ws[letra_columna[10]+str(nro_start)]=val.FECHAS

@@ -2,7 +2,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 15px;
-            /*justify-content: center;*/
+            justify-content: center;
             margin-top: 50px;
             border: solid 1px #007bff;
         }
@@ -63,6 +63,24 @@
             background-color: #e0a800;
         }
 
+         .custom-div.orange {
+            background-color: #df943a;
+            color: #000;
+        }
+
+        .custom-div.orange:hover {
+            background-color: #ba6600;
+        }
+
+         .custom-div.sky {
+            background-color: #099acd;
+            color: #000;
+        }
+
+        .custom-div.sky:hover {
+            background-color: #0b8bb8;
+        }
+
 
 #menureportesala{
     display: flex;
@@ -70,4 +88,20 @@
     margin-left: 20px;
     justify-content: center;
 }
+.contenerdorsubmenu{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+#user-submenu{
+    margin-top: 40px;
+    align-items: center;     
+    text-align: center;
+}
+.title{
+    font-size: 18;
+    font-family: monospace;
+}
+
 

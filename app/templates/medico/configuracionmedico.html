@@ -1,0 +1,32 @@
+{%extends "base.html"%}
+{%block content%}
+
+<div class="container">
+        <div class="custom-div" id="btnupdatetrama">Actualizar Trama</div>
+        <div class="custom-div blue" id="btnupdatepersonal">Actualizar Personal</div>
+        <div class="custom-div red" id="btnupdateregistrador">Actualizar Registrador</div>       
+</div>
+
+<div class="modal fade" id="modalupdatedata" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <form id="eformulario">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Actualizar Data</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="idactualizardata">
+                        <input type="file" id="myFile" name="filename" accept=".csv">
+                        <input type="hidden" id="dateup" name="dateup">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="update" >Actualizar</button>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
+{%endblock%}

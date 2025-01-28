@@ -17,31 +17,53 @@
   
   <nav>
     <ul class="navigation">
-        <li>
-            <a href="#" class="category-link"><i class="fa-regular fa-hospital"></i> Sala Operaciones<span class="caret">▼</span></a>
+        {%if 'Sala Operaciones' in user_roles%}
+        <li>            
+            <a href="#" class="category-link"><i class="fa-regular fa-hospital"></i>Sala Operaciones<span class="caret">▼</span></a>
             <ul class="sub-menu">
+                {%if 'Sala' in user_roles%}
                 <li><a href="{{url_for('salabp.sala')}}">Sala</a></li>
+                {%endif%}
+                {%if 'Urpa' in user_roles%}
                 <li><a href="{{url_for('salabp.urpa')}}">Urpa</a></li>
-                <li><a href="{{url_for('salabp.reportesala')}}">Reportes</a></li>
+                {%endif%}
+                {%if 'Sala Reportes' in user_roles%}
+                <li><a href="{{url_for('salabp.reportesala')}}">Sala Reportes</a></li>
+                {%endif%}
             </ul>
         </li>
+        {%endif%}
+        {%if 'Estadisticas' in user_roles%}
          <li>
-            <a href="#" class="category-link"><i class="fa-solid fa-chart-pie"></i> Estadística<span class="caret">▼</span></a>
+            <a href="#" class="category-link"><i class="fa-solid fa-chart-pie"></i>Estadística<span class="caret">▼</span></a>
             <ul class="sub-menu">
+                {%if 'Configuracion Estadistica' in user_roles%}
                 <li><a href="{{url_for('medico.confgmedico')}}">Configuración</a></li>
+                {%endif%}
+                {%if 'Medicos Estadistica' in user_roles%}
                 <li><a href="{{url_for('medico.estadisticomedico')}}">Médicos</a></li>
+                {%endif%}
             </ul>
         </li>
+        {%endif%}
+        {%if 'Configuracion General' in user_roles%}
         <li>
             <a href="#" class="category-link"><i class="fa-solid fa-gears"></i>Configuración<span class="caret">▼</span></a>
 
             <ul class="sub-menu">
-                <li><a href="{{url_for('cfg.configuracion')}}">Configurar</a></li>
+                 {%if 'Conf User' in user_roles%}
+                <li><a href="{{url_for('cfg.configuracion')}}">Usuarios</a></li>
+                {%endif%}
             </ul>
         </li>
+        {%endif%}
         </ul>
+
 </nav>
+<div class="divright">
   <a href="{{url_for('auth.salir')}} " class="cerrar">Cerrar session</a>
+  <p class="lusuario">usuario: {{usuario}} </p>
+</div>
 </header>
 <div id="contentprincipal">
 {%block content%}
@@ -50,6 +72,7 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="{{url_for('static',filename='js/estadisticas.js')}}"></script>
 <script src="{{url_for('static',filename='js/EventJs.js')}}"></script>
 <script src="{{url_for('static',filename='js/userconfig.js')}}"></script>
 </body>

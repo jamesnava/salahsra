@@ -11,5 +11,19 @@ $(document).ready(function(){
 		});
 	});
 
+	$('#Apersona').click(function(){
+
+		$.ajax({
+			url:'/cfg/mostrarpersonal',
+			type:'GET',
+			success: function(response){
+				alert('hola');
+				$('#contenedoracceso').html(response);
+				
+			}
+		});
+	});
+
+
 	
 });

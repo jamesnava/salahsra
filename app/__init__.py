@@ -22,7 +22,7 @@ def load_user(id_user):
 	return user
 
 
-from app.dashmedico import init_dash_app
+from app.graficos.medico.dashmedico import init_dash_app
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(main_bp)

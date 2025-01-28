@@ -96,6 +96,29 @@ class querySala:
 			else:
 				return None
 
+
+	def ConsultaRoles(self,user_id):
+
+		obj_conectar=Conexion_Triaje()
+		obj_conectar.ejecutar_conn()
+		cursor=obj_conectar.get_cursor()
+		rows=None
+		try:
+			sql=f"""SELECT R.Nombre,PER.nombrepermiso FROM USUARIO AS U INNER JOIN usuarios_roles AS UR ON 
+				U.iduser=UR.id_usuario INNER JOIN ROL AS R ON UR.id_rol=R.Id_Rol INNER JOIN 
+				permiso_roles AS PR ON R.Id_Rol=PR.Id_Rol INNER JOIN Permiso AS PER ON PR.Id_Per=PER.Id_Per WHERE U.iduser=?"""
+			
+			cursor.execute(sql,(user_id,))
+			rows=cursor.fetchall()
+			
+		except Exception as e:
+			raise e
+		finally:
+			cursor.close()
+			obj_conectar.close_conection()			
+			return rows
+			
+
 	def consultarTabla(self,tabla):
 		obj_conectar=Conexion_Triaje()
 		obj_conectar.ejecutar_conn()
@@ -207,8 +230,7 @@ class querySala:
 			cursor.execute(sql)
 			cursor.commit()
 			return cursor.rowcount
-		except Exception as e:
-			
+		except Exception as e:			
 			print(traceback.format_exc())
 		finally:
 			cursor.close()
@@ -342,8 +364,10 @@ class queryHIS:
 		cursor=obj_conectar.get_cursor()
 		try:
 			
-			sql=f"""select Id_Cita,Fecha_Atencion from TRAMA where Fecha_Atencion between 
-			'2024-01-01' and '2024-01-31' group by Id_Cita,Fecha_Atencion"""					
+			sql=f"""SELECT T.Fecha_Atencion,MP.Numero_Documento,MP.Nombres_Personal+' '+MP.Apellido_Paterno_Personal+' '+MP.Apellido_Materno_Personal AS DatosP,
+					T.Id_Ups, COUNT(*) AS cantidad FROM TRAMA AS T INNER JOIN MAESTRO_PERSONAL AS MP ON T.Id_Personal=MP.Id_Personal
+					WHERE Fecha_Atencion BETWEEN '2016-01-01' AND '2016-12-31' GROUP BY T.Fecha_Atencion,MP.Numero_Documento,MP.Nombres_Personal+' '+
+					MP.Apellido_Paterno_Personal+' '+MP.Apellido_Materno_Personal,T.Id_Ups"""					
 			cursor.execute(sql)
 			rows=cursor.fetchall()
 			columnas=[columns[0] for columns in cursor.description] 
@@ -354,6 +378,67 @@ class queryHIS:
 			cursor.close()
 			obj_conectar.close_conection()
 			return columnas,rows
+	def consultarAtencionCampos(self,idcita,codigo_item,fecha,lote):
+		rows=[]		
+		obj_conectar=Conexion_TriajeHIS()
+		obj_conectar.ejecutar_conn()
+		cursor=obj_conectar.get_cursor()
+		try:
+			
+			sql=f"""SELECT * FROM TRAMA WHERE Id_Cita=? AND Codigo_Item=? 
+			AND Fecha_Atencion=? AND Lote=?"""					
+			cursor.execute(sql,(idcita,codigo_item,fecha,lote))
+			rows=cursor.fetchall()
+			
+
+		except Exception as e:
+			print(e)
+		finally:
+			cursor.close()
+			obj_conectar.close_conection()
+			return rows
+
+	def consultarAtencionParametro(self,tabla,campo,valor):
+		rows=[]		
+		obj_conectar=Conexion_TriajeHIS()
+		obj_conectar.ejecutar_conn()
+		cursor=obj_conectar.get_cursor()
+		try:
+			
+			sql=f"""SELECT * FROM {tabla} WHERE {campo}='{valor}'"""					
+			cursor.execute(sql)			
+			rows=cursor.fetchall()		
+
+		except Exception as e:
+			print(e)
+		finally:
+			cursor.close()
+			obj_conectar.close_conection()
+			return rows
+
+	def InsertTable(self,tabla,diccionario):
+		obj_conectar=Conexion_TriajeHIS()
+		obj_conectar.ejecutar_conn()
+		cursor=obj_conectar.get_cursor()		
+		try:
+			
+			columnas=[]
+			valores=[]
+			for clave,valor in diccionario.items():
+				columnas.append(clave)
+				valores.append(valor)
+			
+			col=f"({', '.join(columnas)})"
+			
+			sql=f"INSERT INTO {tabla} {col} VALUES {tuple(valores)}"			
+			cursor.execute(sql)
+			cursor.commit()
+			return cursor.rowcount
+		except Exception as e:			
+			return diccionario
+		finally:
+			cursor.close()
+			obj_conectar.close_conection()
 
 			
 		
