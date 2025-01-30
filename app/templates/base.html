@@ -19,6 +19,7 @@
   <nav>
     <ul class="navigation">
         {%if 'Sala Operaciones' in user_roles%}
+
         <li>            
             <a href="#" class="category-link"><i class="fa-regular fa-hospital"></i>Sala Operaciones<span class="caret">▼</span></a>
             <ul class="sub-menu">
@@ -34,6 +35,7 @@
             </ul>
         </li>
         {%endif%}
+
         {%if 'Estadisticas' in user_roles%}
          <li>
             <a href="#" class="category-link"><i class="fa-solid fa-chart-pie"></i>Estadística<span class="caret">▼</span></a>
@@ -47,6 +49,7 @@
             </ul>
         </li>
         {%endif%}
+        
         {%if 'Configuracion General' in user_roles%}
         <li>
             <a href="#" class="category-link"><i class="fa-solid fa-gears"></i>Configuración<span class="caret">▼</span></a>
@@ -61,10 +64,16 @@
         </ul>
 
 </nav>
+
 <div class="divright">
   <a href="{{url_for('auth.salir')}} " class="cerrar">Cerrar session</a>
-  <p class="lusuario">usuario: {{usuario}} </p>
+
+  {%block contentuser%}
+  <p class="lusuario">usuario: {{g.user.username if g.user else 'Hacked'}} </p>
+  {%endblock%}
+
 </div>
+
 </header>
 
 {%with messages=get_flashed_messages(with_categories=true)%}

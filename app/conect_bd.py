@@ -54,6 +54,7 @@ class Conexion_BD:
 		self.llave='qBBws2UNvFJNFZ5oRh5yx04AIhSzhCgjsfS3Q44QL_M='
 		self.conn=None
 		self.b_d=b_d
+		
 	def __enter__(self):
 		servidor='192.168.1.3'
 		bd=self.b_d

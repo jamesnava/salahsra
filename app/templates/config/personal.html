@@ -1,6 +1,6 @@
 
 <div class="container">
-<button class="btn btn-success mt-2">Insertar</button>
+<button class="btn btn-success mt-2" id="btnInsertarPersonal">Insertar</button>
 
 <table class="table mt-2" id="tabla-personal">
   <thead class="table-dark">
@@ -11,15 +11,76 @@
       <th scope="col">Accion</th>
     </tr>
   </thead>
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-      <td>@mdo</td>
-    </tr>
+  <tbody>  
     
   </tbody>
 </table>
+
+
+<div class="modal fade" id="modalInsertPersonal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <form id="FormularioPersonal" method="post">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Insertar Personal</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">                      
+                
+                <div class="row mt-2">
+                  <div class="col">
+                  <label>DNI</label>
+                  </div>
+                  <div class="col">
+                  <input type="text" name="" class="form-control" id="PDni">
+                  </div>
+                </div>
+
+                <div class="row mt-2">
+                  <div class="col">
+                  <label>NOMBRE </label>
+                  </div>
+                  <div class="col">
+                  <input type="text" name="" class="form-control" id="PNombre">
+                  </div>
+                </div>
+
+                <div class="row mt-2">
+                  <div class="col">
+                  <label>APELLIDO PATERNO </label>
+                  </div>
+                  <div class="col">
+                  <input type="text" name="" class="form-control" id="PAPaterno">
+                  </div>
+                </div>
+
+                <div class="row mt-2">
+                  <div class="col">
+                  <label>APELLIDO MATERNO </label>
+                  </div>
+                  <div class="col">
+                  <input type="text" class="form-control"  id="PAMaterno" >
+                  </div>
+                </div>
+
+                <div class="row mt-2">
+                  <div class="col">
+                  <label>CORREO</label>
+                  </div>
+                  <div class="col">
+                  <input type="email" name="" class="form-control" id="PEmail">
+                  </div>
+                </div>                
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" id="btnguardarpersonal">Guardar</button>
+              
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+               
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
 </div>

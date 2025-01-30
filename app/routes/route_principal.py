@@ -7,7 +7,15 @@ main_bp=Blueprint('main',__name__,url_prefix='/main')
 
 
 
-	
+
+
+@main_bp.before_request
+def cargar_usuario():
+	if current_user.is_authenticated:
+		obj_sala=querySala()
+		g.user=obj_sala.Cargarusuario('iduser',current_user.id)
+		
+
 @main_bp.app_context_processor
 def inject_user_roles():
 	if current_user.is_authenticated:

@@ -6,6 +6,13 @@ from app.modelos.modconfiguraciones.queryconfiguracion import MConfiguraciones
 
 
 configuracion_bp=Blueprint('cfg',__name__,url_prefix='/cfg')
+bd_current='salap'
+
+@configuracion_bp.before_request
+def cargar_usuario():
+	if current_user.is_authenticated:
+		obj_sala=querySala()
+		g.user=obj_sala.Cargarusuario('iduser',current_user.id)
 
 def check_permissions(*required_role):
 	def decorator(f):		
@@ -39,9 +46,62 @@ def userconf():
 @login_required
 @check_permissions('ADMINISTRADOR')
 def listarpersonal():
-	obj_consulta=MConfiguraciones('salap')
-	rows=obj_consulta.consultaPersonales()
+	obj_consulta=MConfiguraciones(bd_current)
+	sql='SELECT * FROM PERSONA'
+	
+	rows=obj_consulta.consultaPersonales(sql)
 	data=[{'Dni':val.Dni,'NOMBRES':val.NOMBRES,'APELLIDOS':val.APELLIDOPATERNO+' '+val.APELLIDOMATERNO} for val in rows]
 	html=render_template('config/personal.html')
+
+	return jsonify({'html':html,'data':data})
+
+
+@configuracion_bp.route('/addpersonal',methods=['POST'])
+@login_required
+@check_permissions('ADMINISTRADOR')
+def addpersonal():
+	obj_consulta=MConfiguraciones(bd_current)
+	Dni=request.form.get('Dni')
+	nombre=request.form.get('NOMBRES')
+	apellidopaterno=request.form.get('APELLIDOPATERNO')
+	apellidomaterno=request.form.get('APELLIDOMATERNO')
+	email=request.form.get('EMAIL')	
+
+	params=(Dni,nombre,apellidopaterno,apellidomaterno,email)
+
+	sql=f"INSERT INTO PERSONA(Dni,NOMBRES,APELLIDOPATERNO,APELLIDOMATERNO,EMAIL) VALUES(?,?,?,?,?)"
+	nro=obj_consulta.Insertar(sql,params)
+	return jsonify({'nro':nro})
+
+
+
+@configuracion_bp.route('/listuser')
+@login_required
+@check_permissions('ADMINISTRADOR')
+def listuser():
+	obj_consulta=MConfiguraciones(bd_current)
+	sql=f"""SELECT U.iduser,U.usua,U.DNI,P.NOMBRES,P.APELLIDOPATERNO,P.APELLIDOMATERNO,R.Nombre
+			FROM Usuario AS U INNER JOIN PERSONA AS P ON U.DNI=P.Dni INNER JOIN usuarios_roles AS RU ON 
+			RU.id_usuario=U.iduser INNER JOIN ROL AS R ON RU.id_rol=R.Id_Rol"""
+	rows=obj_consulta.consultaUsuariosCompleto(sql)
+	data=[{'iduser':val.iduser,'usuario':val.usua,'DNI':val.DNI,'NOMNBRES':val.NOMBRES,'APELLIDOPATERNO':val.APELLIDOPATERNO,
+	'APELLIDOMATERNO':val.APELLIDOMATERNO,'ROL':val.Nombre} for val in rows]
+	
+	html=render_template('config/usuario.html')
+
+	return jsonify({'html':html,'data':data})
+	
+
+
+@configuracion_bp.route('/filllistrol',methods=['POST'])
+@login_required
+@check_permissions('ADMINISTRADOR')
+def listrol():
+	obj_consulta=MConfiguraciones(bd_current)
+	sql=f"""SELECT * FROM ROL"""
+	rows=obj_consulta.consultaUsuariosCompleto(sql)
+	data=[{'Id_Rol':val.Id_Rol,'namerol':val.Nombre} for val in rows]
+	
+	html=render_template('config/usuario.html')
 
 	return jsonify({'html':html,'data':data})
