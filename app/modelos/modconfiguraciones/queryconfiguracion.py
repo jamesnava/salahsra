@@ -21,6 +21,15 @@ class MConfiguraciones:
 
 		except Exception as e:
 			print(e)
+			
+	def cosultarDatosParams(self,query,params):
+		try:
+			with Conexion_BD(self.bd) as conn:
+				cursor=conn.cursor()
+				cursor.execute(query,params)
+				return cursor.fetchall()
+		except Exception as e:
+			raise e
 
 	def Insertar(self,query,params):
 		try:

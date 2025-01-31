@@ -91,6 +91,27 @@ def listuser():
 
 	return jsonify({'html':html,'data':data})
 	
+@configuracion_bp.route('/adduser',methods=['POST'])
+@login_required
+@check_permissions('ADMINISTRADOR')
+def AddUser():
+	obj_consulta=MConfiguraciones(bd_current)
+	sql=f"SELECT * FROM USUARIO WHERE DNI=?"
+	dni=request.form.get('dni')
+	rows=obj_consulta.cosultarDatosParams(sql,(dni,))
+	if not rows:
+		sql1=f"SELECT * FROM USUARIO WHERE usua=?"
+		usua=request.form.get('usuario')
+		rows_user=obj_consulta.cosultarDatosParams(sql1,(usua,))
+		if not rows_user:
+			contrasena=request.form.get('contrasena')
+			rol=request.form.get('rol')
+			print(dni,usua,contrasena,rol)
+			return [1]
+		else:
+			return [2]
+	else:
+		return [3]
 
 
 @configuracion_bp.route('/filllistrol',methods=['POST'])

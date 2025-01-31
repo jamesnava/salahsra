@@ -105,3 +105,26 @@
 }
 
 
+
+.modal-content {
+      background-color: #f8f9fa; /* Color de fondo del modal */
+      color: #343a40; /* Color de texto del modal */
+    }
+    .modal-header {
+      background-color: #007bff; /* Color de fondo del encabezado */
+      color: #fff; /* Color de texto del encabezado */
+    }
+    .modal-title {
+      font-weight: bold; /* Texto del título en negrita */
+    }
+    .modal-body {
+      padding: 20px; 
+    }
+    .modal-footer {
+      background-color: #e9ecef; 
+      border-top: none;
+    }
+    .btn-primary {
+      background-color: #007bff; 
+      border-color: #007bff; 
+    }

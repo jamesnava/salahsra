@@ -101,9 +101,10 @@ $('#user-submenu').on('click','#btnAgregarUsuario',function(){
 				seleccionHtml.empty();
 
 				response.data.forEach(function(row){
-					seleccionHtml.append(`<option value="${row.Id_Rol}">${row.namerol}</option>`)
+					seleccionHtml.append(`<option value="${row.Id_Rol}">${row.namerol}</option>`);
 
 				});
+				seleccionHtml.trigger('change');
 			}
 		});		
 	});
@@ -112,7 +113,40 @@ $('#user-submenu').on('click','#btnguardarusuario',function(){
 	let dni=$('#UDni').val();
 	let usuario=$('#Uusuario').val();
 	let contrasena=$('#Ucontra').val();
-	let rol=$('#URol').val();
+	let rol=$('#UESelectRol').val();
+	alert($('#UESelectRol option:selected').val());
+	alert($('#UESelectRol option:selected').text());
+	$.ajax({
+		url:'/cfg/adduser',
+		type:'POST',
+		data:{'dni':dni,'usuario':usuario,'contrasena':contrasena,'rol':rol},
+		success: function(response){			
+			if (response==1)				
+				{
+				$('#modalInsertUsuario').modal('hide').data('bs.modal',null);				
+				$('#cuerpomessage').append('<img src="/static/img/user/check.png">');	
+				$('#cuerpomessage').append('<p>Se insertó correctamente!!</p>');				
+				$('#miModal').modal('show');
+				setTimeout(function(){location.reload(true);},3000);					
+				
+			}
+			if (response==2){
+				$('#modalInsertUsuario').modal('hide').data('bs.modal',null);				
+				$('#cuerpomessage').append('<img src="/static/img/user/denied.png">');	
+				$('#cuerpomessage').append('<p>Elige un usuario diferente !!</p>');				
+				$('#miModal').modal('show');
+				setTimeout(function(){location.reload(true);},3000);
+			}
+			if(response==3){
+				$('#modalInsertUsuario').modal('hide').data('bs.modal',null);				
+				$('#cuerpomessage').append('<img src="/static/img/user/denied.png">');	
+				$('#cuerpomessage').append('<p>El personal ya cuenta con un usuario!!</p>');				
+				$('#miModal').modal('show');
+				setTimeout(function(){location.reload(true);},3000);
+			}
+
+		}
+	});
 
 
 });
